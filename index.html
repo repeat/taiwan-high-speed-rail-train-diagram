@@ -180,6 +180,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
                 {mileage: mileage.ZUY, time: p.ZUY}
             );
             schedule[train_no].columns = ["time", "mileage"];
+            schedule[train_no].train_no = train_no;
 
             return schedule[train_no];
     } // endswitch +train_no
