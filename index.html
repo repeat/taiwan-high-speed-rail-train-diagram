@@ -3,6 +3,9 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <body>
 <script>
+// 擷取時間
+var parseTime = d3.timeParse("%H:%M");
+
 // 設定範圍
 var margin = {top: 30, right: 50, bottom: 30, left: 50},
     width = 1300 - margin.left - margin.right,
@@ -15,5 +18,39 @@ var svg = d3.select("body")
         .attr("height", height + margin.top + margin.bottom)
     .append("g")
         .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
+
+// 設定 X 軸
+var x = d3.scaleTime()
+    // 座標範圍
+    .range([0, width])
+    // 資料範圍
+    .domain([parseTime("07:00"), parseTime("09:00")]),
+    xAxisBottom = d3.axisBottom(x).ticks(40),
+    xAxisTop = d3.axisTop(x).ticks(40);
+
+// 設定 Y 軸
+var y = d3.scaleLinear()
+    .range([0, height])
+    .domain([-3.298, 345.188]),
+    yAxisLeft = d3.axisLeft(y).ticks(20),
+    yAxisRight = d3.axisRight(y).ticks(20);
+
+// 畫 X 軸
+svg.append("g")
+    .attr("class", "x axis bottom")
+    .attr("transform", "translate(0, " + height + ")")
+    .call(xAxisBottom);
+svg.append("g")
+    .attr("class", "x axis top")
+    .call(xAxisTop);
+
+// 畫 Y 軸
+svg.append("g")
+    .attr("class", "y axis left")
+    .call(yAxisLeft);
+svg.append("g")
+    .attr("class", "y axis right")
+    .attr("transform", "translate(" + width + ", 0)")
+    .call(yAxisRight);
 </script>
 </body>
