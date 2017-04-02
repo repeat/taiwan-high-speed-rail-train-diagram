@@ -99,15 +99,49 @@ var x = d3.scaleTime()
     .range([0, width])
     // 資料範圍
     .domain([parseTime("06:00"), parseTime("23:59")]),
-    xAxisBottom = d3.axisBottom(x).ticks(40),
-    xAxisTop = d3.axisTop(x).ticks(40);
+    xAxisBottom = d3.axisBottom(x)
+        .tickArguments([d3.timeMinute.every(10)])
+        .tickFormat(d3.timeFormat("%H:%M")),
+    xAxisTop = d3.axisTop(x)
+        .tickArguments([d3.timeMinute.every(10)])
+        .tickFormat(d3.timeFormat("%H:%M"));
 
 // 設定 Y 軸
 var y = d3.scaleLinear()
     .range([0, height])
     .domain([mileage.NAG, mileage.ZUY]),
-    yAxisLeft = d3.axisLeft(y).ticks(20),
-    yAxisRight = d3.axisRight(y).ticks(20);
+    yAxisLeft = d3.axisLeft(y)
+        .tickValues([
+            mileage.NAG,
+            mileage.TPE,
+            mileage.BAC,
+            mileage.TAY,
+            mileage.HSC,
+            mileage.MIL,
+            mileage.TAC,
+            mileage.CHH,
+            mileage.YUL,
+            mileage.CHY,
+            mileage.TNN,
+            mileage.ZUY
+        ])
+        .tickFormat(d3.format(".3f")),
+    yAxisRight = d3.axisRight(y)
+        .tickValues([
+            mileage.NAG,
+            mileage.TPE,
+            mileage.BAC,
+            mileage.TAY,
+            mileage.HSC,
+            mileage.MIL,
+            mileage.TAC,
+            mileage.CHH,
+            mileage.YUL,
+            mileage.CHY,
+            mileage.TNN,
+            mileage.ZUY
+        ])
+        .tickFormat(d3.format(".3f"));
 
 // 畫 X 軸
 svg.append("g")
