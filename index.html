@@ -187,8 +187,9 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
 }, function (error, dataset) {
     // 畫折線
     dataset.forEach(function(data) {
+        var train_type = parseInt(data.train_no / 100);
         svg.append("path")
-            .attr("class", "line")
+            .attr("class", "line" + train_type)
             .attr("d", valueline(data));
     });
 });
