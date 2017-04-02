@@ -132,6 +132,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
     switch (+train_no) {
         case 203:
         case 205:
+        case 603:
             if (p.NAG !== null) {
                 schedule[train_no].push(
                     {mileage: mileage.NAG, time: p.NAG}
@@ -144,7 +145,24 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
             schedule[train_no].push(
                 {mileage: mileage.TPE, time: p.TPE},
                 {mileage: mileage.BAC, time: addMinutes(p.BAC, intervals.BAC)},
-                {mileage: mileage.BAC, time: p.BAC},
+                {mileage: mileage.BAC, time: p.BAC}
+            );
+            
+            if (p.TAY !== null) {
+                schedule[train_no].push(
+                    {mileage: mileage.TAY, time: addMinutes(p.TAY, intervals.TAY)},
+                    {mileage: mileage.TAY, time: p.TAY}
+                );
+            }
+            
+            if (p.HSC !== null) {
+                schedule[train_no].push(
+                    {mileage: mileage.HSC, time: addMinutes(p.HSC, intervals.HSC)},
+                    {mileage: mileage.HSC, time: p.HSC}
+                );
+            }
+            
+            schedule[train_no].push(
                 {mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC)},
                 {mileage: mileage.TAC, time: p.TAC}
             );
