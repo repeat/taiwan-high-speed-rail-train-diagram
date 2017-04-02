@@ -54,7 +54,20 @@ function addMinutes (source, minutes = 0) {
 }
 
 // 設定車站資料
-var mileage = {
+var stations = {
+    "01": "南港",
+    "02": "台北",
+    "03": "板橋",
+    "04": "桃園",
+    "05": "新竹",
+    "06": "苗栗",
+    "07": "台中",
+    "08": "彰化",
+    "09": "雲林",
+    "10": "嘉義",
+    "11": "台南",
+    "12": "左營"
+}, mileage = {
     NAG:  -3.298,
     TPE:   5.904,
     BAC:  13.120,
@@ -125,7 +138,10 @@ var y = d3.scaleLinear()
             mileage.TNN,
             mileage.ZUY
         ])
-        .tickFormat(d3.format(".3f")),
+        .tickFormat(function(d, i) {
+            var j = d3.format("02")(i + 1);
+            return stations[j];
+        }),
     yAxisRight = d3.axisRight(y)
         .tickValues([
             mileage.NAG,
@@ -141,7 +157,10 @@ var y = d3.scaleLinear()
             mileage.TNN,
             mileage.ZUY
         ])
-        .tickFormat(d3.format(".3f"));
+        .tickFormat(function(d, i) {
+            var j = d3.format("02")(i + 1);
+            return stations[j];
+        });
 
 // 畫 X 軸
 svg.append("g")
