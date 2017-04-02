@@ -6,6 +6,33 @@
 // 擷取時間
 var parseTime = d3.timeParse("%H:%M");
 
+// 設定車站資料
+var mileage = {
+    NAG:  -3.298,
+    TPE:   5.904,
+    BAC:  13.120,
+    TAY:  42.285,
+    HSC:  72.179,
+    MIL: 104.865,
+    TAC: 165.733,
+    CHH: 193.886,
+    YUL: 218.480,
+    CHY: 251.585,
+    TNN: 313.860,
+    ZUY: 345.188,
+}, intervals = {
+    TPE: -3,
+    BAC: -1,
+    TAY: -1,
+    HSC: -1,
+    MIL: -1,
+    TAC: -2,
+    CHH: -1,
+    YUL: -1,
+    CHY: -1,
+    TNN: -1,
+};
+
 // 設定範圍
 var margin = {top: 30, right: 50, bottom: 30, left: 50},
     width = 1300 - margin.left - margin.right,
@@ -31,7 +58,7 @@ var x = d3.scaleTime()
 // 設定 Y 軸
 var y = d3.scaleLinear()
     .range([0, height])
-    .domain([-3.298, 345.188]),
+    .domain([mileage.NAG, mileage.ZUY]),
     yAxisLeft = d3.axisLeft(y).ticks(20),
     yAxisRight = d3.axisRight(y).ticks(20);
 
