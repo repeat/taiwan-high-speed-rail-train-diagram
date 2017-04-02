@@ -81,6 +81,25 @@ svg.append("g")
     .call(yAxisRight);
 // 讀取 CSV
 d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/20170428/timetable.csv", function(d, i) {
+    var train_no = d.車次,
+        schedule = {};
+        
+    schedule[train_no] = [];
+    
+    switch (+train_no) {
+        case 203:
+            schedule[train_no].push(
+                {mileage: mileage.TPE, time: parseTime(d.台北)},
+                {mileage: mileage.BAC, time: parseTime(d.板橋)},
+                {mileage: mileage.TAC, time: parseTime(d.台中)},
+                {mileage: mileage.CHY, time: parseTime(d.嘉義)},
+                {mileage: mileage.TNN, time: parseTime(d.台南)},
+                {mileage: mileage.ZUY, time: parseTime(d.左營)}
+            );
+            schedule[train_no].columns = ["time", "mileage"];
+
+            return schedule[train_no];
+    } // endswitch +train_no
 }, function (error, data) {
 });
 </script>
