@@ -82,7 +82,7 @@ var mileage = {
 
 // 設定範圍
 var margin = {top: 30, right: 50, bottom: 30, left: 50},
-    width = 1400 - margin.left - margin.right,
+    width = 2700 - margin.left - margin.right,
     height = 700 - margin.top - margin.bottom;
 
 // 設定 SVG
@@ -98,7 +98,7 @@ var x = d3.scaleTime()
     // 座標範圍
     .range([0, width])
     // 資料範圍
-    .domain([parseTime("06:30"), parseTime("09:30")]),
+    .domain([parseTime("06:00"), parseTime("12:00")]),
     xAxisBottom = d3.axisBottom(x).ticks(40),
     xAxisTop = d3.axisTop(x).ticks(40);
 
