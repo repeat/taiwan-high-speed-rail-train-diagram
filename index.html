@@ -21,6 +21,13 @@ path {
 // 擷取時間
 var parseTime = d3.timeParse("%H:%M");
 
+// 手動加減時間
+function addMinutes (target, minutes = 0) {
+    // target 必須是 DateTime object
+    target.setMinutes(target.getMinutes() + parseInt(minutes));
+    return target;
+}
+
 // 設定車站資料
 var mileage = {
     NAG:  -3.298,
@@ -111,9 +118,13 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
         case 203:
             schedule[train_no].push(
                 {mileage: mileage.TPE, time: parseTime(d.台北)},
+                {mileage: mileage.BAC, time: addMinutes(parseTime(d.板橋), intervals.BAC)},
                 {mileage: mileage.BAC, time: parseTime(d.板橋)},
+                {mileage: mileage.TAC, time: addMinutes(parseTime(d.台中), intervals.TAC)},
                 {mileage: mileage.TAC, time: parseTime(d.台中)},
+                {mileage: mileage.CHY, time: addMinutes(parseTime(d.嘉義), intervals.CHY)},
                 {mileage: mileage.CHY, time: parseTime(d.嘉義)},
+                {mileage: mileage.TNN, time: addMinutes(parseTime(d.台南), intervals.TNN)},
                 {mileage: mileage.TNN, time: parseTime(d.台南)},
                 {mileage: mileage.ZUY, time: parseTime(d.左營)}
             );
