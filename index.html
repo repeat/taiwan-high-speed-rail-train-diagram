@@ -135,6 +135,7 @@ var valueline = d3.line()
 // 讀取 CSV
 d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/20170428/timetable.csv", function(d, i) {
     var train_no = d.車次,
+        train_type = parseInt(+train_no / 100) % 10,
         p = {
             NAG: parseTime(d.南港),
             TPE: parseTime(d.台北),
@@ -159,6 +160,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
         case 205:
         case 603:
         case 805:
+        case 1505:
             if (p.NAG !== null) {
                 schedule[train_no].push(
                     {mileage: mileage.NAG, time: p.NAG}
@@ -194,9 +196,13 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
                     {mileage: mileage.MIL, time: p.MIL}
                 );
             }
-            
+
+            if (train_type !== 5) {
+                schedule[train_no].push(
+                    {mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC)}
+                );
+            }
             schedule[train_no].push(
-                {mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC)},
                 {mileage: mileage.TAC, time: p.TAC}
             );
             
@@ -228,9 +234,11 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
                 );
             }
             
-            schedule[train_no].push(
-                {mileage: mileage.ZUY, time: p.ZUY}
-            );
+            if (p.ZUY !== null) {
+                schedule[train_no].push(
+                    {mileage: mileage.ZUY, time: p.ZUY}
+                );
+            }
             schedule[train_no].columns = ["time", "mileage"];
             schedule[train_no].train_no = train_no;
 
@@ -239,7 +247,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
 }, function (error, dataset) {
     // 畫折線
     dataset.forEach(function(data) {
-        var train_type = parseInt(data.train_no / 100);
+        var train_type = parseInt(data.train_no / 100) % 10;
         svg.append("path")
             .attr("class", "line" + train_type)
             .attr("d", valueline(data));
