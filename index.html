@@ -136,6 +136,7 @@ var valueline = d3.line()
 d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/20170428/timetable.csv", function(d, i) {
     var train_no = d.車次,
         train_type = parseInt(+train_no / 100) % 10,
+        train_direction = (+train_no % 2) ? 's' : 'n',
         p = {
             NAG: parseTime(d.南港),
             TPE: parseTime(d.台北),
@@ -154,104 +155,97 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
         
     schedule[train_no] = [];
     
-    switch (+train_no) {
-        case 109:
-        case 203:
-        case 205:
-        case 583:
-        case 603:
-        case 805:
-        case 1505:
-            if (p.NAG !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.NAG, time: p.NAG}
-                );
-                schedule[train_no].push(
-                    {mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE)}
-                );
-            }
-            
-            if (p.TPE !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.TPE, time: p.TPE}
-                );
-            }
-            
-            if (p.BAC !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.BAC, time: addMinutes(p.BAC, intervals.BAC)},
-                    {mileage: mileage.BAC, time: p.BAC}
-                );
-            }
-            
-            if (p.TAY !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.TAY, time: addMinutes(p.TAY, intervals.TAY)},
-                    {mileage: mileage.TAY, time: p.TAY}
-                );
-            }
-            
-            if (p.HSC !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.HSC, time: addMinutes(p.HSC, intervals.HSC)},
-                    {mileage: mileage.HSC, time: p.HSC}
-                );
-            }
-            
-            if (p.MIL !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.MIL, time: addMinutes(p.MIL, intervals.MIL)},
-                    {mileage: mileage.MIL, time: p.MIL}
-                );
-            }
-
-            if (train_type !== 5) {
-                schedule[train_no].push(
-                    {mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC)}
-                );
-            }
+    if (train_direction === "s") {
+        if (p.NAG !== null) {
             schedule[train_no].push(
-                {mileage: mileage.TAC, time: p.TAC}
+                {mileage: mileage.NAG, time: p.NAG}
             );
-            
-            if (p.CHH !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.CHH, time: addMinutes(p.CHH, intervals.CHH)},
-                    {mileage: mileage.CHH, time: p.CHH}
-                );
-            }
-            
-            if (p.YUL !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.YUL, time: addMinutes(p.YUL, intervals.YUL)},
-                    {mileage: mileage.YUL, time: p.YUL}
-                );
-            }
-            
-            if (p.CHY !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.CHY, time: addMinutes(p.CHY, intervals.CHY)},
-                    {mileage: mileage.CHY, time: p.CHY}
-                );
-            }
-            
-            if (p.TNN !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.TNN, time: addMinutes(p.TNN, intervals.TNN)},
-                    {mileage: mileage.TNN, time: p.TNN}
-                );
-            }
-            
-            if (p.ZUY !== null) {
-                schedule[train_no].push(
-                    {mileage: mileage.ZUY, time: p.ZUY}
-                );
-            }
-            schedule[train_no].columns = ["time", "mileage"];
-            schedule[train_no].train_no = train_no;
+            schedule[train_no].push(
+                {mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE)}
+            );
+        }
+        
+        if (p.TPE !== null) {
+            schedule[train_no].push(
+                {mileage: mileage.TPE, time: p.TPE}
+            );
+        }
+        
+        if (p.BAC !== null) {
+            schedule[train_no].push(
+                {mileage: mileage.BAC, time: addMinutes(p.BAC, intervals.BAC)},
+                {mileage: mileage.BAC, time: p.BAC}
+            );
+        }
+        
+        if (p.TAY !== null) {
+            schedule[train_no].push(
+                {mileage: mileage.TAY, time: addMinutes(p.TAY, intervals.TAY)},
+                {mileage: mileage.TAY, time: p.TAY}
+            );
+        }
+        
+        if (p.HSC !== null) {
+            schedule[train_no].push(
+                {mileage: mileage.HSC, time: addMinutes(p.HSC, intervals.HSC)},
+                {mileage: mileage.HSC, time: p.HSC}
+            );
+        }
+        
+        if (p.MIL !== null) {
+            schedule[train_no].push(
+                {mileage: mileage.MIL, time: addMinutes(p.MIL, intervals.MIL)},
+                {mileage: mileage.MIL, time: p.MIL}
+            );
+        }
 
-            return schedule[train_no];
-    } // endswitch +train_no
+        if (train_type !== 5) {
+            schedule[train_no].push(
+                {mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC)}
+            );
+        }
+        schedule[train_no].push(
+            {mileage: mileage.TAC, time: p.TAC}
+        );
+        
+        if (p.CHH !== null) {
+            schedule[train_no].push(
+                {mileage: mileage.CHH, time: addMinutes(p.CHH, intervals.CHH)},
+                {mileage: mileage.CHH, time: p.CHH}
+            );
+        }
+        
+        if (p.YUL !== null) {
+            schedule[train_no].push(
+                {mileage: mileage.YUL, time: addMinutes(p.YUL, intervals.YUL)},
+                {mileage: mileage.YUL, time: p.YUL}
+            );
+        }
+        
+        if (p.CHY !== null) {
+            schedule[train_no].push(
+                {mileage: mileage.CHY, time: addMinutes(p.CHY, intervals.CHY)},
+                {mileage: mileage.CHY, time: p.CHY}
+            );
+        }
+        
+        if (p.TNN !== null) {
+            schedule[train_no].push(
+                {mileage: mileage.TNN, time: addMinutes(p.TNN, intervals.TNN)},
+                {mileage: mileage.TNN, time: p.TNN}
+            );
+        }
+        
+        if (p.ZUY !== null) {
+            schedule[train_no].push(
+                {mileage: mileage.ZUY, time: p.ZUY}
+            );
+        }
+        schedule[train_no].columns = ["time", "mileage"];
+        schedule[train_no].train_no = train_no;
+
+        return schedule[train_no];
+    } // endif train_direction
 }, function (error, dataset) {
     // 畫折線
     dataset.forEach(function(data) {
