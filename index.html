@@ -211,12 +211,16 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
     if (train_direction === "s") {
         if (p.NAG !== null) {
             schedule[train_no].push(
-                {mileage: mileage.NAG, time: p.NAG},
-                {mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE)}
+                {mileage: mileage.NAG, time: p.NAG}
             );
         }
 
         if (p.TPE !== null) {
+            if (p.NAG !== null) {
+                schedule[train_no].push(
+                    {mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE)}
+                );
+            }
             schedule[train_no].push(
                 {mileage: mileage.TPE, time: p.TPE}
             );
@@ -364,13 +368,12 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
             );
         }
 
-        if (p.NAG !== null) {
-            schedule[train_no].push(
-                {mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE)}
-            );
-        }
-
         if (p.TPE !== null) {
+            if (p.NAG !== null) {
+                schedule[train_no].push(
+                    {mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE)}
+                );
+            }
             schedule[train_no].push(
                 {mileage: mileage.TPE, time: p.TPE}
             );
