@@ -79,5 +79,9 @@ svg.append("g")
     .attr("class", "y axis right")
     .attr("transform", "translate(" + width + ", 0)")
     .call(yAxisRight);
+// 讀取 CSV
+d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/20170428/timetable.csv", function(d, i) {
+}, function (error, data) {
+});
 </script>
 </body>
