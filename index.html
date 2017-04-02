@@ -22,10 +22,11 @@ path {
 var parseTime = d3.timeParse("%H:%M");
 
 // 手動加減時間
-function addMinutes (target, minutes = 0) {
-    // target 必須是 DateTime object
-    target.setMinutes(target.getMinutes() + parseInt(minutes));
-    return target;
+function addMinutes (source, minutes = 0) {
+    // source 必須是 DateTime object
+    output = new Date(source);
+    output.setMinutes(output.getMinutes() + parseInt(minutes));
+    return output;
 }
 
 // 設定車站資料
