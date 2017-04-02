@@ -1,5 +1,20 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<style>
+path {
+    stroke-width: 2;
+    fill: none;
+}
+.line {
+    stroke: orange;
+}
+.axis path, .axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+</style>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <body>
 <script>
@@ -51,7 +66,7 @@ var x = d3.scaleTime()
     // 座標範圍
     .range([0, width])
     // 資料範圍
-    .domain([parseTime("07:00"), parseTime("09:00")]),
+    .domain([parseTime("06:30"), parseTime("09:00")]),
     xAxisBottom = d3.axisBottom(x).ticks(40),
     xAxisTop = d3.axisTop(x).ticks(40);
 
@@ -79,6 +94,12 @@ svg.append("g")
     .attr("class", "y axis right")
     .attr("transform", "translate(" + width + ", 0)")
     .call(yAxisRight);
+
+// d3.line
+var valueline = d3.line()
+    .x(function(d) { return x(d.time); })
+    .y(function(d) { return y(d.mileage); });
+
 // 讀取 CSV
 d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/20170428/timetable.csv", function(d, i) {
     var train_no = d.車次,
@@ -100,7 +121,13 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
 
             return schedule[train_no];
     } // endswitch +train_no
-}, function (error, data) {
+}, function (error, dataset) {
+    // 畫折線
+    dataset.forEach(function(data) {
+        svg.append("path")
+            .attr("class", "line")
+            .attr("d", valueline(data));
+    });
 });
 </script>
 </body>
