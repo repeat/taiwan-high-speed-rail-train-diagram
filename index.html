@@ -93,6 +93,22 @@ var stations = {
     TNN: -1,
 };
 
+// 設定自訂座標間隔
+var customYTickValues = [
+    mileage.NAG,
+    mileage.TPE,
+    mileage.BAC,
+    mileage.TAY,
+    mileage.HSC,
+    mileage.MIL,
+    mileage.TAC,
+    mileage.CHH,
+    mileage.YUL,
+    mileage.CHY,
+    mileage.TNN,
+    mileage.ZUY
+];
+
 // 設定範圍
 var margin = {top: 30, right: 70, bottom: 30, left: 70},
     width = 4200 - margin.left - margin.right,
@@ -124,39 +140,13 @@ var y = d3.scaleLinear()
         .range([0, height])
         .domain([mileage.NAG, mileage.ZUY]),
     yAxisLeft = d3.axisLeft(y)
-        .tickValues([
-            mileage.NAG,
-            mileage.TPE,
-            mileage.BAC,
-            mileage.TAY,
-            mileage.HSC,
-            mileage.MIL,
-            mileage.TAC,
-            mileage.CHH,
-            mileage.YUL,
-            mileage.CHY,
-            mileage.TNN,
-            mileage.ZUY
-        ])
+        .tickValues(customYTickValues)
         .tickFormat(function(d, i) {
             var j = d3.format("02")(i + 1);
             return stations[j];
         }),
     yAxisRight = d3.axisRight(y)
-        .tickValues([
-            mileage.NAG,
-            mileage.TPE,
-            mileage.BAC,
-            mileage.TAY,
-            mileage.HSC,
-            mileage.MIL,
-            mileage.TAC,
-            mileage.CHH,
-            mileage.YUL,
-            mileage.CHY,
-            mileage.TNN,
-            mileage.ZUY
-        ])
+        .tickValues(customYTickValues)
         .tickFormat(function(d, i) {
             var j = d3.format("02")(i + 1);
             return stations[j];
