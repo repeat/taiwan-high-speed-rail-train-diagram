@@ -94,7 +94,7 @@ var stations = {
 };
 
 // 設定自訂座標間隔
-var customYTickValues = [
+var yTickValues = [
     mileage.NAG,
     mileage.TPE,
     mileage.BAC,
@@ -110,7 +110,7 @@ var customYTickValues = [
 ];
 
 // 設定自訂座標資料
-var customYTickFormat = function(d, i) {
+var yTickFormat = function(d, i) {
     var j = d3.format("02")(i + 1);
     return stations[j];
 };
@@ -146,11 +146,11 @@ var y = d3.scaleLinear()
         .range([0, height])
         .domain([mileage.NAG, mileage.ZUY]),
     yAxisLeft = d3.axisLeft(y)
-        .tickValues(customYTickValues)
-        .tickFormat(customYTickFormat),
+        .tickValues(yTickValues)
+        .tickFormat(yTickFormat),
     yAxisRight = d3.axisRight(y)
-        .tickValues(customYTickValues)
-        .tickFormat(customYTickFormat);
+        .tickValues(yTickValues)
+        .tickFormat(yTickFormat);
 
 // 畫 X 軸
 svg.append("g")
