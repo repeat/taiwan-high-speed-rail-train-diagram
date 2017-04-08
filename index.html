@@ -133,7 +133,7 @@ var x = d3.scaleTime()
         // 座標範圍
         .range([0, width])
         // 資料範圍
-        .domain([parseTime("06:00"), parseTime("23:59")]),
+        .domain([parseTime("06:00"), parseTime("24:00")]),
     xAxisBottom = d3.axisBottom(x)
         .tickArguments([d3.timeMinute.every(10)])
         .tickFormat(d3.timeFormat("%H:%M")),
