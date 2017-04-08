@@ -139,7 +139,11 @@ var x = d3.scaleTime()
         .tickFormat(d3.timeFormat("%H:%M")),
     xAxisTop = d3.axisTop(x)
         .tickArguments([d3.timeMinute.every(10)])
-        .tickFormat(d3.timeFormat("%H:%M"));
+        .tickFormat(d3.timeFormat("%H:%M")),
+    xAxisVertical = d3.axisTop(x)
+        .tickArguments([d3.timeMinute.every(10)])
+        .tickFormat("")
+        .tickSize(height);
 
 // 設定 Y 軸
 var y = d3.scaleLinear()
@@ -150,7 +154,11 @@ var y = d3.scaleLinear()
         .tickFormat(yTickFormat),
     yAxisRight = d3.axisRight(y)
         .tickValues(yTickValues)
-        .tickFormat(yTickFormat);
+        .tickFormat(yTickFormat),
+    yAxisHorizon = d3.axisRight(y)
+        .tickValues(yTickValues)
+        .tickFormat("")
+        .tickSize(width);
 
 // 畫 X 軸
 svg.append("g")
@@ -160,6 +168,10 @@ svg.append("g")
 svg.append("g")
     .attr("class", "x axis top")
     .call(xAxisTop);
+svg.append("g")
+    .attr("class", "x axis vertical")
+    .attr("transform", "translate(0, " + height + ")")
+    .call(xAxisVertical);
 
 // 畫 Y 軸
 svg.append("g")
@@ -169,6 +181,9 @@ svg.append("g")
     .attr("class", "y axis right")
     .attr("transform", "translate(" + width + ", 0)")
     .call(yAxisRight);
+svg.append("g")
+    .attr("class", "y axis horizon")
+    .call(yAxisHorizon);
 
 // d3.line
 var valueline = d3.line()
