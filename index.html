@@ -109,6 +109,12 @@ var customYTickValues = [
     mileage.ZUY
 ];
 
+// 設定自訂座標資料
+var customYTickFormat = function(d, i) {
+    var j = d3.format("02")(i + 1);
+    return stations[j];
+};
+
 // 設定範圍
 var margin = {top: 30, right: 70, bottom: 30, left: 70},
     width = 4200 - margin.left - margin.right,
@@ -141,16 +147,10 @@ var y = d3.scaleLinear()
         .domain([mileage.NAG, mileage.ZUY]),
     yAxisLeft = d3.axisLeft(y)
         .tickValues(customYTickValues)
-        .tickFormat(function(d, i) {
-            var j = d3.format("02")(i + 1);
-            return stations[j];
-        }),
+        .tickFormat(customYTickFormat),
     yAxisRight = d3.axisRight(y)
         .tickValues(customYTickValues)
-        .tickFormat(function(d, i) {
-            var j = d3.format("02")(i + 1);
-            return stations[j];
-        });
+        .tickFormat(customYTickFormat);
 
 // 畫 X 軸
 svg.append("g")
