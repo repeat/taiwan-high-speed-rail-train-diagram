@@ -393,6 +393,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
 
     schedule[train_no].columns = ["time", "mileage"];
     schedule[train_no].train_no = train_no;
+    schedule[train_no].train_direction = train_direction;
 
     return schedule[train_no];
 }, function (error, dataset) {
