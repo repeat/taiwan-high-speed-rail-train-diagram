@@ -70,7 +70,7 @@ var stations = {
 }, mileage = {
     NAG:  -3.298,
     TPE:   5.904,
-    BAC:  13.120,
+    BAQ:  13.120,
     TAY:  42.285,
     HSC:  72.179,
     MIL: 104.865,
@@ -82,7 +82,7 @@ var stations = {
     ZUY: 345.188,
 }, intervals = {
     TPE: -3,
-    BAC: -1,
+    BAQ: -1,
     TAY: -1,
     HSC: -1,
     MIL: -1,
@@ -97,7 +97,7 @@ var stations = {
 var yTickValues = [
     mileage.NAG,
     mileage.TPE,
-    mileage.BAC,
+    mileage.BAQ,
     mileage.TAY,
     mileage.HSC,
     mileage.MIL,
@@ -198,7 +198,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
         p = {
             NAG: parseTime(d.南港),
             TPE: parseTime(d.台北),
-            BAC: parseTime(d.板橋),
+            BAQ: parseTime(d.板橋),
             TAY: parseTime(d.桃園),
             HSC: parseTime(d.新竹),
             MIL: parseTime(d.苗栗),
@@ -231,10 +231,10 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
             );
         }
 
-        if (p.BAC !== null) {
+        if (p.BAQ !== null) {
             schedule[train_no].push(
-                {mileage: mileage.BAC, time: addMinutes(p.BAC, intervals.BAC)},
-                {mileage: mileage.BAC, time: p.BAC}
+                {mileage: mileage.BAQ, time: addMinutes(p.BAQ, intervals.BAQ)},
+                {mileage: mileage.BAQ, time: p.BAQ}
             );
         }
 
@@ -366,10 +366,10 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
             );
         }
 
-        if (p.BAC !== null) {
+        if (p.BAQ !== null) {
             schedule[train_no].push(
-                {mileage: mileage.BAC, time: addMinutes(p.BAC, intervals.BAC)},
-                {mileage: mileage.BAC, time: p.BAC}
+                {mileage: mileage.BAQ, time: addMinutes(p.BAQ, intervals.BAQ)},
+                {mileage: mileage.BAQ, time: p.BAQ}
             );
         }
 
