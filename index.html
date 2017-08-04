@@ -412,10 +412,52 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
 }, function (error, dataset) {
     // 畫折線
     dataset.forEach(function(data) {
-        var train_type = parseInt(data.train_no / 100) % 10;
+        var train_direction = data.train_direction,
+            train_no = data.train_no,
+            train_type = parseInt(train_no / 100) % 10;
+
         svg.append("path")
             .attr("class", "line" + train_type)
             .attr("d", valueline(data));
+
+        for (let i = 0; i < data.length - 1; i++) {
+            var isDrawTrainNo;
+
+            if (i === 0) {
+                isDrawTrainNo = true;
+            } else if (data[i].mileage === mileage.TAC && data[i+1].mileage !== mileage.TAC) {
+                isDrawTrainNo = true;
+            } else {
+                isDrawTrainNo = false;
+            }
+
+            if (!isDrawTrainNo) {
+                continue;
+            }
+
+            // 計算角度
+            var angle = Math.atan2(
+                y(data[i + 1].mileage) - y(data[i].mileage),
+                x(data[i + 1].time) - x(data[i].time),
+            ) * 180 / Math.PI;
+
+            // 計算文字座標
+            var xTextPosition = (x(data[i + 1].time) + x(data[i].time)) / 2,
+                yTextPosition = (y(data[i + 1].mileage) + y(data[i].mileage)) / 2 - 3;
+
+            // 加上車次資訊
+            svg.append("text")
+                .attr("stroke-width", 0)
+                .attr("text-anchor", "middle")
+                .attr(
+                    "transform",
+                    "translate(" + xTextPosition + ", " + yTextPosition + ") rotate(" + angle + ")"
+                )
+                .style("font-family", '"Noto Sans TC", sans-serif')
+                .style("font-size", "14px")
+                .style("fill", colors[train_type])
+                .text(train_no);
+        }
     });
 });
 </script>
