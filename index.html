@@ -211,7 +211,7 @@ var valueline = d3.line()
 d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/timetable.csv", function(d, i) {
     var train_no = d.車次,
         train_type = parseInt(+train_no / 100) % 10,
-        train_direction = (+train_no % 2) ? 's' : 'n',
+        train_direction = (+train_no % 2) ? "s" : "n",
         p = {
             NAG: parseTime(today + " " + d.南港),
             TPE: parseTime(today + " " + d.台北),
