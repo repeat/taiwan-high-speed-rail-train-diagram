@@ -42,8 +42,12 @@ path {
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <body>
 <script>
+// 擷取今日日期
+var formatDate = d3.timeFormat("%Y/%m/%d"),
+    today = formatDate(new Date());
+
 // 擷取時間
-var parseTime = d3.timeParse("%H:%M");
+var parseTime = d3.timeParse("%Y/%m/%d %H:%M");
 
 // 手動加減時間
 function addMinutes (source, minutes = 0) {
@@ -146,7 +150,7 @@ var x = d3.scaleTime()
         // 座標範圍
         .range([0, width])
         // 資料範圍
-        .domain([parseTime("06:00"), parseTime("24:00")]),
+        .domain([parseTime(today + " 06:00"), parseTime(today + " 24:00")]),
     xAxisBottom = d3.axisBottom(x)
         .tickArguments([d3.timeMinute.every(10)])
         .tickFormat(d3.timeFormat("%H:%M")),
@@ -209,18 +213,18 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
         train_type = parseInt(+train_no / 100) % 10,
         train_direction = (+train_no % 2) ? 's' : 'n',
         p = {
-            NAG: parseTime(d.南港),
-            TPE: parseTime(d.台北),
-            BAQ: parseTime(d.板橋),
-            TAY: parseTime(d.桃園),
-            HSC: parseTime(d.新竹),
-            MIL: parseTime(d.苗栗),
-            TAC: parseTime(d.台中),
-            CHH: parseTime(d.彰化),
-            YUL: parseTime(d.雲林),
-            CHY: parseTime(d.嘉義),
-            TNN: parseTime(d.台南),
-            ZUY: parseTime(d.左營)
+            NAG: parseTime(today + " " + d.南港),
+            TPE: parseTime(today + " " + d.台北),
+            BAQ: parseTime(today + " " + d.板橋),
+            TAY: parseTime(today + " " + d.桃園),
+            HSC: parseTime(today + " " + d.新竹),
+            MIL: parseTime(today + " " + d.苗栗),
+            TAC: parseTime(today + " " + d.台中),
+            CHH: parseTime(today + " " + d.彰化),
+            YUL: parseTime(today + " " + d.雲林),
+            CHY: parseTime(today + " " + d.嘉義),
+            TNN: parseTime(today + " " + d.台南),
+            ZUY: parseTime(today + " " + d.左營)
         },
         schedule = {};
 
