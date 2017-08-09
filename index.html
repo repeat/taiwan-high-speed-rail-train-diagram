@@ -56,7 +56,7 @@ function parseTime(timeString) {
 }
 
 // 手動加減時間
-function addMinutes (source, minutes = 0) {
+function addMinutes(source, minutes = 0) {
     // source 必須是 DateTime object
     output = new Date(source);
     output.setMinutes(output.getMinutes() + parseInt(minutes));
