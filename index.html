@@ -399,11 +399,20 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
         var trainDirection = data.trainDirection,
             trainNumber = data.trainNumber,
             trainType = parseInt(trainNumber / 100) % 10,
+            isIrregular = parseInt(trainNumber / 1000) > 0 ? true : false,
+            trainWeekdays = data.trainWeekdays.replace(/-+/g, "").replace("7", "0"),
+            todayWeekday = d3.timeFormat('%w')(new Date()),
+            re = new RegExp(todayWeekday),
             currentPath = svg.append("path")
             .attr("stroke", colors[trainType])
             .attr("class", "line" + trainType)
             .attr("id", "path-" + trainNumber)
             .attr("d", valueline(data));
+
+        // 如果今天沒開這台車，用虛線表示
+        if (isIrregular && !re.test(trainWeekdays)) {
+            currentPath.attr("stroke-dasharray", "2")
+        }
 
         for (let i = 0; i < data.length - 1; i ++) {
             var isDrawTrainNo;
