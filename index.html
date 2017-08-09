@@ -187,9 +187,9 @@ var valueline = d3.line()
 
 // 讀取 CSV
 d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/timetable.csv", function (d, i) {
-    var train_no = d.車次,
-        train_type = parseInt(+train_no / 100) % 10,
-        train_direction = (+train_no % 2) ? "s" : "n",
+    var trainNumber = d.車次,
+        trainType = parseInt(+trainNumber / 100) % 10,
+        trainDirection = (+trainNumber % 2) ? "s" : "n",
         p = {
             NAG: parseTime(today + " " + d.南港),
             TPE: parseTime(today + " " + d.台北),
@@ -206,163 +206,163 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
         },
         schedule = {};
 
-    schedule[train_no] = [];
+    schedule[trainNumber] = [];
 
-    if (train_direction === "s") {
+    if (trainDirection === "s") {
         if (p.NAG !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.NAG, time: p.NAG}
             );
         }
 
         if (p.TPE !== null) {
             if (p.NAG !== null) {
-                schedule[train_no].push(
+                schedule[trainNumber].push(
                     {mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE)}
                 );
             }
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.TPE, time: p.TPE}
             );
         }
 
         if (p.BAQ !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.BAQ, time: addMinutes(p.BAQ, intervals.BAQ)},
                 {mileage: mileage.BAQ, time: p.BAQ}
             );
         }
 
         if (p.TAY !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.TAY, time: addMinutes(p.TAY, intervals.TAY)},
                 {mileage: mileage.TAY, time: p.TAY}
             );
         }
 
         if (p.HSC !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.HSC, time: addMinutes(p.HSC, intervals.HSC)},
                 {mileage: mileage.HSC, time: p.HSC}
             );
         }
 
         if (p.MIL !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.MIL, time: addMinutes(p.MIL, intervals.MIL)},
                 {mileage: mileage.MIL, time: p.MIL}
             );
         }
 
-        if (train_type !== 5) {
-            schedule[train_no].push(
+        if (trainType !== 5) {
+            schedule[trainNumber].push(
                 {mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC)}
             );
         }
-        schedule[train_no].push(
+        schedule[trainNumber].push(
             {mileage: mileage.TAC, time: p.TAC}
         );
 
         if (p.CHH !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.CHH, time: addMinutes(p.CHH, intervals.CHH)},
                 {mileage: mileage.CHH, time: p.CHH}
             );
         }
 
         if (p.YUL !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.YUL, time: addMinutes(p.YUL, intervals.YUL)},
                 {mileage: mileage.YUL, time: p.YUL}
             );
         }
 
         if (p.CHY !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.CHY, time: addMinutes(p.CHY, intervals.CHY)},
                 {mileage: mileage.CHY, time: p.CHY}
             );
         }
 
         if (p.TNN !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.TNN, time: addMinutes(p.TNN, intervals.TNN)},
                 {mileage: mileage.TNN, time: p.TNN}
             );
         }
 
         if (p.ZUY !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.ZUY, time: p.ZUY}
             );
         }
     } else {
         if (p.ZUY !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.ZUY, time: p.ZUY}
             );
         }
 
         if (p.TNN !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.TNN, time: addMinutes(p.TNN, intervals.TNN)},
                 {mileage: mileage.TNN, time: p.TNN}
             );
         }
 
         if (p.CHY !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.CHY, time: addMinutes(p.CHY, intervals.CHY)},
                 {mileage: mileage.CHY, time: p.CHY}
             );
         }
 
         if (p.YUL !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.YUL, time: addMinutes(p.YUL, intervals.YUL)},
                 {mileage: mileage.YUL, time: p.YUL}
             );
         }
 
         if (p.CHH !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.CHH, time: addMinutes(p.CHH, intervals.CHH)},
                 {mileage: mileage.CHH, time: p.CHH}
             );
         }
 
-        if (train_type !== 5) {
-            schedule[train_no].push(
+        if (trainType !== 5) {
+            schedule[trainNumber].push(
                 {mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC)}
             );
         }
-        schedule[train_no].push(
+        schedule[trainNumber].push(
             {mileage: mileage.TAC, time: p.TAC}
         );
 
         if (p.MIL !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.MIL, time: addMinutes(p.MIL, intervals.MIL)},
                 {mileage: mileage.MIL, time: p.MIL}
             );
         }
 
         if (p.HSC !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.HSC, time: addMinutes(p.HSC, intervals.HSC)},
                 {mileage: mileage.HSC, time: p.HSC}
             );
         }
 
         if (p.TAY !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.TAY, time: addMinutes(p.TAY, intervals.TAY)},
                 {mileage: mileage.TAY, time: p.TAY}
             );
         }
 
         if (p.BAQ !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.BAQ, time: addMinutes(p.BAQ, intervals.BAQ)},
                 {mileage: mileage.BAQ, time: p.BAQ}
             );
@@ -370,37 +370,37 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
 
         if (p.TPE !== null) {
             if (p.NAG !== null) {
-                schedule[train_no].push(
+                schedule[trainNumber].push(
                     {mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE)}
                 );
             }
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.TPE, time: p.TPE}
             );
         }
 
         if (p.NAG !== null) {
-            schedule[train_no].push(
+            schedule[trainNumber].push(
                 {mileage: mileage.NAG, time: p.NAG}
             );
         }
-    } // endif train_direction
+    } // endif trainDirection
 
-    schedule[train_no].columns = ["time", "mileage"];
-    schedule[train_no].train_no = train_no;
-    schedule[train_no].train_direction = train_direction;
+    schedule[trainNumber].columns = ["time", "mileage"];
+    schedule[trainNumber].trainNumber = trainNumber;
+    schedule[trainNumber].trainDirection = trainDirection;
 
-    return schedule[train_no];
+    return schedule[trainNumber];
 }, function (error, dataset) {
     // 畫折線
     dataset.forEach(function (data) {
-        var train_direction = data.train_direction,
-            train_no = data.train_no,
-            train_type = parseInt(train_no / 100) % 10;
+        var trainDirection = data.trainDirection,
+            trainNumber = data.trainNumber,
+            trainType = parseInt(trainNumber / 100) % 10;
 
         svg.append("path")
-            .attr("stroke", colors[train_type])
-            .attr("class", "line" + train_type)
+            .attr("stroke", colors[trainType])
+            .attr("class", "line" + trainType)
             .attr("d", valueline(data));
 
         for (let i = 0; i < data.length - 1; i ++) {
@@ -437,8 +437,8 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
                     "translate(" + xTextPosition + ", " + yTextPosition + ") rotate(" + angle + ")"
                 )
                 .attr("class", "trainNumber")
-                .style("fill", colors[train_type])
-                .text(train_no);
+                .style("fill", colors[trainType])
+                .text(trainNumber);
         }
     });
 });
