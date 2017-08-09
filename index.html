@@ -396,9 +396,8 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
     dataset.forEach(function (data) {
         var trainDirection = data.trainDirection,
             trainNumber = data.trainNumber,
-            trainType = parseInt(trainNumber / 100) % 10;
-
-        svg.append("path")
+            trainType = parseInt(trainNumber / 100) % 10,
+            currentPath = svg.append("path")
             .attr("stroke", colors[trainType])
             .attr("class", "line" + trainType)
             .attr("id", "path-" + trainNumber)
