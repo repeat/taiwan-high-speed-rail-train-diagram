@@ -38,6 +38,10 @@ path {
     stroke-width: 1;
     shape-rendering: crispEdges;
 }
+.trainNumber {
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 14px;
+}
 </style>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <body>
@@ -457,8 +461,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
                     "transform",
                     "translate(" + xTextPosition + ", " + yTextPosition + ") rotate(" + angle + ")"
                 )
-                .style("font-family", '"Noto Sans TC", sans-serif')
-                .style("font-size", "14px")
+                .attr("class", "trainNumber")
                 .style("fill", colors[train_type])
                 .text(train_no);
         }
