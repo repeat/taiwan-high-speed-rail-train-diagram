@@ -5,33 +5,6 @@ path {
     stroke-width: 2;
     fill: none;
 }
-.line1 {
-    stroke: orange;
-}
-.line2 {
-    stroke: red;
-}
-.line3 {
-    stroke: silver;
-}
-.line4 {
-    stroke: gold;
-}
-.line5 {
-    stroke: green;
-}
-.line6 {
-    stroke: skyblue;
-}
-.line7 {
-    stroke: purple;
-}
-.line8 { /* emerald */
-    stroke: #50c878;
-}
-.line9 {
-    stroke: brown;
-}
 .axis path, .axis line {
     fill: none;
     stroke: grey;
@@ -426,6 +399,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
             train_type = parseInt(train_no / 100) % 10;
 
         svg.append("path")
+            .attr("stroke", colors[train_type])
             .attr("class", "line" + train_type)
             .attr("d", valueline(data));
 
