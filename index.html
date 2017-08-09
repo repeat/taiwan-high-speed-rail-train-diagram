@@ -429,12 +429,12 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
             .attr("class", "line" + train_type)
             .attr("d", valueline(data));
 
-        for (let i = 0; i < data.length - 1; i++) {
+        for (let i = 0; i < data.length - 1; i ++) {
             var isDrawTrainNo;
 
             if (i === 0) {
                 isDrawTrainNo = true;
-            } else if (data[i].mileage === mileage.TAC && data[i+1].mileage !== mileage.TAC) {
+            } else if (data[i].mileage === mileage.TAC && data[i + 1].mileage !== mileage.TAC) {
                 isDrawTrainNo = true;
             } else {
                 isDrawTrainNo = false;
