@@ -132,8 +132,8 @@ var colors = {
 };
 
 // 設定自訂座標資料
-    var j = d3.format("02")(i + 1);
 var yTickFormat = function (d, i) {
+    let j = d3.format("02")(i + 1);
     return stations[j];
 };
 
