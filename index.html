@@ -190,6 +190,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
     var trainNumber = d.車次,
         trainType = parseInt(+trainNumber / 100) % 10,
         trainDirection = (+trainNumber % 2) ? "s" : "n",
+        trainWeekdays = d.行駛日,
         p = {
             NAG: parseTime(today + " " + d.南港),
             TPE: parseTime(today + " " + d.台北),
@@ -389,6 +390,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
     schedule[trainNumber].columns = ["time", "mileage"];
     schedule[trainNumber].trainNumber = trainNumber;
     schedule[trainNumber].trainDirection = trainDirection;
+    schedule[trainNumber].trainWeekdays = trainWeekdays;
 
     return schedule[trainNumber];
 }, function (error, dataset) {
