@@ -401,6 +401,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
         svg.append("path")
             .attr("stroke", colors[trainType])
             .attr("class", "line" + trainType)
+            .attr("id", "path-" + trainNumber)
             .attr("d", valueline(data));
 
         for (let i = 0; i < data.length - 1; i ++) {
@@ -437,6 +438,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
                     "translate(" + xTextPosition + ", " + yTextPosition + ") rotate(" + angle + ")"
                 )
                 .attr("class", "trainNumber")
+                .attr("id", "text-" + trainNumber)
                 .style("fill", colors[trainType])
                 .text(trainNumber);
         }
