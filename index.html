@@ -127,8 +127,8 @@ var colors = {
 };
 
 // 設定自訂座標資料
-var yTickFormat = function(d, i) {
     var j = d3.format("02")(i + 1);
+var yTickFormat = function (d, i) {
     return stations[j];
 };
 
@@ -204,11 +204,11 @@ svg.append("g")
 
 // d3.line
 var valueline = d3.line()
-    .x(function(d) { return x(d.time); })
-    .y(function(d) { return y(d.mileage); });
+    .x(function (d) { return x(d.time); })
+    .y(function (d) { return y(d.mileage); });
 
 // 讀取 CSV
-d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/timetable.csv", function(d, i) {
+d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/timetable.csv", function (d, i) {
     var train_no = d.車次,
         train_type = parseInt(+train_no / 100) % 10,
         train_direction = (+train_no % 2) ? "s" : "n",
@@ -415,7 +415,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
     return schedule[train_no];
 }, function (error, dataset) {
     // 畫折線
-    dataset.forEach(function(data) {
+    dataset.forEach(function (data) {
         var train_direction = data.train_direction,
             train_no = data.train_no,
             train_type = parseInt(train_no / 100) % 10;
