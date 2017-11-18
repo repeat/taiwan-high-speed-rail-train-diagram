@@ -4,7 +4,7 @@
 ## 參考資料
 
 ### 高鐵時刻表
-* [台灣高鐵時刻表](http://www.thsrc.com.tw/UploadFiles/TicketFile/aaaed025-1f36-4a54-afa5-31b642847142.pdf)
+* [台灣高鐵時刻表](http://www.thsrc.com.tw/tw/TimeTable/SearchResult)
 * [政府資料開放平台－高鐵時刻表](https://data.gov.tw/dataset/7080)
 * [自行整理](https://github.com/repeat/taiwan-high-speed-rail-timetable)
 
