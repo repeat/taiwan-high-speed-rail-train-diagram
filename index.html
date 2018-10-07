@@ -195,7 +195,7 @@ var valueline = d3.line()
     .y(function (d) { return y(d.mileage); });
 
 // 讀取 CSV
-d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/20181008/timetable.csv", function (d, i) {
+d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/timetable.csv", function (d, i) {
     var trainNumber = d.車次,
         trainType = parseInt(+trainNumber / 100) % 10,
         trainDirection = (+trainNumber % 2) ? "s" : "n",
