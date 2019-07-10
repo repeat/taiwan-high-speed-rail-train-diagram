@@ -20,7 +20,7 @@ path {
     font-size: 14px;
 }
 </style>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
 <body>
 <script>
 // 擷取今日日期
@@ -403,7 +403,7 @@ d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetabl
     schedule[trainNumber].trainWeekdays = trainWeekdays;
 
     return schedule[trainNumber];
-}, function (error, dataset) {
+}).then(function (dataset) {
     // 畫折線
     dataset.forEach(function (data) {
         var trainDirection = data.trainDirection,
