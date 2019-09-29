@@ -40,7 +40,7 @@ function addMinutes(source, minutes = 0) {
 }
 
 // 設定車站資料
-var stations = {
+const stations = {
     "01": "南港",
     "02": "台北",
     "03": "板橋",
@@ -80,7 +80,7 @@ var stations = {
 };
 
 // 設定自訂座標間隔
-var yTickValues = [
+const yTickValues = [
     mileage.NAG,
     mileage.TPE,
     mileage.BAQ,
@@ -96,7 +96,7 @@ var yTickValues = [
 ];
 
 // 設定顏色
-var colors = {
+const colors = {
     /* 東京メトロ銀座線 Orange */
     "1": "#f29903",
     /* 東京メトロ有楽町線 Gold */
@@ -121,7 +121,7 @@ var yTickFormat = function (d, i) {
 };
 
 // 設定範圍
-var margin = {top: 20, right: 40, bottom: 20, left: 40},
+const margin = {top: 20, right: 40, bottom: 20, left: 40},
     width = 4200 - margin.left - margin.right,
     height = 700 - margin.top - margin.bottom;
 
@@ -196,7 +196,8 @@ var valueline = d3.line()
     .y(function (d) { return y(d.mileage); });
 
 // 讀取 CSV
-d3.csv("https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/timetable.csv", function (d, i) {
+const rawURL = "https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/timetable.csv";
+d3.csv(rawURL, function (d, i) {
     var trainNumber = d.車次,
         trainType = parseInt(+trainNumber / 100) % 10,
         trainDirection = (+trainNumber % 2) ? "s" : "n",
