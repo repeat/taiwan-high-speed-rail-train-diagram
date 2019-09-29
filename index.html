@@ -426,14 +426,12 @@ d3.csv(rawURL, (d, i) => {
         }
 
         for (let i = 0; i < data.length - 1; i ++) {
-            var isDrawTrainNo;
+            var isDrawTrainNo = false;
 
             if (i === 0) {
                 isDrawTrainNo = true;
             } else if (data[i].mileage === mileage.TAC && data[i + 1].mileage !== mileage.TAC) {
                 isDrawTrainNo = true;
-            } else {
-                isDrawTrainNo = false;
             }
 
             if (!isDrawTrainNo) {
