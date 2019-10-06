@@ -457,7 +457,7 @@ d3.csv(rawURL, (d, i) => {
                     "translate(" + xTextPosition + ", " + yTextPosition + ") rotate(" + angle + ")"
                 )
                 .attr("class", "trainNumber")
-                .attr("id", "text-" + trainNumber)
+                .attr("id", "text-" + trainNumber + "-" + i)
                 .style("fill", colors[trainType])
                 .text(trainNumber);
         }
