@@ -1,5 +1,4 @@
-# taiwan-high-speed-rail-train-diagram
-台灣高鐵列車運行圖
+# [台灣高鐵列車運行圖 Taiwan High Speed Rail Train Diagram](https://repeat.github.io/taiwan-high-speed-rail-train-diagram/)
 
 ## 參考資料
 
