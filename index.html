@@ -52,12 +52,6 @@ function addMinutes(source, minutes = 0) {
     return output;
 }
 
-// 判斷符合的日期區間
-function isTodayBetweenDates(min = "2020/01/01", max = "2099/12/31") {
-    return parseTime(min + " 00:00") < parseTime(today + " 00:00")
-        && parseTime(today + " 00:00") <= parseTime(max + " 00:00");
-}
-
 // 設定車站資料
 const stations = {
     "01": "南港",
@@ -215,23 +209,7 @@ var valueline = d3.line()
     .y(d => { return y(d.mileage); });
 
 // 讀取 CSV
-let validDates = [
-    "2020/05/18",
-    "2020/05/25",
-    "2020/06/01",
-    "2020/06/12",
-    "2020/06/30",
-];
-var dateDirectory;
-for (let i = 0; i < validDates.length; i++) {
-    if (isTodayBetweenDates(validDates[i], validDates[i + 1]) === true) {
-        dateDirectory = validDates[i];
-    } else {
-        continue;
-    }
-}
-var rawURL = "https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/"
-    + dateDirectory + "/timetable.csv";
+var rawURL = "https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/2021/05/21/timetable.csv";
 
 d3.csv(rawURL, (d, i) => {
     var trainNumber = d.車次,
