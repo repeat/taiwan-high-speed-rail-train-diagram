@@ -209,7 +209,7 @@ var valueline = d3.line()
     .y(d => { return y(d.mileage); });
 
 // 讀取 CSV
-var rawURL = "https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/2021/05/27/timetable.csv";
+var rawURL = "https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/2021/10/13/timetable.csv";
 
 d3.csv(rawURL, (d, i) => {
     var trainNumber = d.車次,
