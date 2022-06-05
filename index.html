@@ -6,6 +6,7 @@
 <meta name="description" content="台灣高鐵列車運行圖">
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap&subset=chinese-traditional"
     rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-5515521-2"></script>
 <script>
@@ -36,7 +37,6 @@ path {
 <title>台灣高鐵列車運行圖</title>
 </head>
 <body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js" integrity="sha256-Xb6SSzhH3wEPC4Vy3W70Lqh9Y3Du/3KxPqI2JHQSpTw=" crossorigin="anonymous"></script>
 <script>
 // 擷取今日日期
 var today = d3.timeFormat("%Y/%m/%d")(new Date());
