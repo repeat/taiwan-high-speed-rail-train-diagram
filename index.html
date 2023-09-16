@@ -218,7 +218,12 @@
       .y(d => { return y(d.mileage); });
 
     // 讀取 CSV
-    var rawURL = "https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/2022/01/04/timetable.csv";
+    let timeTableDate = '2023/07/01';
+    let isOctTimetable = (new Date()) >= (new Date('2023/10/15'));
+    if (isOctTimetable) {
+      timeTableDate = '2023/10/15';
+    }
+    var rawURL = `https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/${timeTableDate}/timetable.csv`;
 
     d3.csv(rawURL, (d, i) => {
       var trainNumber = d.車次,
