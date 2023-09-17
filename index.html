@@ -45,12 +45,18 @@
 
 <body>
   <script>
-    // 擷取今日日期
-    var today = d3.timeFormat("%Y/%m/%d")(new Date());
+    const today = new Date(),
+      tomorrow = new Date(today).setDate(today.getDate() + 1),
+      // 擷取今天和明天的日期
+      todayDate = d3.timeFormat("%Y/%m/%d")(today),
+      tomorrowDate = d3.timeFormat("%Y/%m/%d")(tomorrow);
 
     // 擷取時間
     function parseTime(timeString) {
-      return d3.timeParse("%Y/%m/%d %H:%M")(timeString);
+      let hour = timeString.split(":")[0],
+        prefix = ((hour === "00") ? tomorrowDate : todayDate) + " ";
+
+      return d3.timeParse("%Y/%m/%d %H:%M")(prefix + timeString);
     }
 
     // 手動加減時間
@@ -160,7 +166,7 @@
       // 座標範圍
       .range([0, width])
       // 資料範圍
-      .domain([parseTime(today + " 05:50"), parseTime(today + " 24:00")]),
+      .domain([parseTime("05:50"), parseTime("00:10")]),
       xAxisBottom = d3.axisBottom(x)
         .tickArguments([d3.timeMinute.every(10)])
         .tickFormat(d3.timeFormat("%H:%M")),
@@ -231,18 +237,18 @@
         trainDirection = (+trainNumber % 2) ? "s" : "n",
         trainWeekdays = d.行駛日,
         p = {
-          NAG: parseTime(today + " " + d.南港),
-          TPE: parseTime(today + " " + d.台北),
-          BAQ: parseTime(today + " " + d.板橋),
-          TAY: parseTime(today + " " + d.桃園),
-          HSC: parseTime(today + " " + d.新竹),
-          MIL: parseTime(today + " " + d.苗栗),
-          TAC: parseTime(today + " " + d.台中),
-          CHH: parseTime(today + " " + d.彰化),
-          YUL: parseTime(today + " " + d.雲林),
-          CHY: parseTime(today + " " + d.嘉義),
-          TNN: parseTime(today + " " + d.台南),
-          ZUY: parseTime(today + " " + d.左營)
+          NAG: parseTime(d.南港),
+          TPE: parseTime(d.台北),
+          BAQ: parseTime(d.板橋),
+          TAY: parseTime(d.桃園),
+          HSC: parseTime(d.新竹),
+          MIL: parseTime(d.苗栗),
+          TAC: parseTime(d.台中),
+          CHH: parseTime(d.彰化),
+          YUL: parseTime(d.雲林),
+          CHY: parseTime(d.嘉義),
+          TNN: parseTime(d.台南),
+          ZUY: parseTime(d.左營)
         },
         schedule = {};
 
