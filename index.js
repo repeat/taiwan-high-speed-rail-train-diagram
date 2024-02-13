@@ -96,7 +96,7 @@ const colors = {
 };
 
 // 設定自訂座標資料
-let yTickFormat = (d, i) => {
+let yTickFormat = (_, i) => {
   let j = d3.format("02")(i + 1);
   return stations[j];
 };
@@ -182,7 +182,7 @@ let currentTimeTableDate = '2023/10/16',
   timeTableDate = (today >= new Date(nextTimeTableDate) ? nextTimeTableDate : currentTimeTableDate),
   rawURL = `https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/${timeTableDate}/timetable.csv`;
 
-d3.csv(rawURL, (d, i) => {
+d3.csv(rawURL, (d) => {
   let trainNumber = d.車次,
     trainType = parseInt(+trainNumber / 100) % 10,
     trainDirection = (+trainNumber % 2) ? "s" : "n",
@@ -385,19 +385,17 @@ d3.csv(rawURL, (d, i) => {
 
   schedule[trainNumber].columns = ["time", "mileage"];
   schedule[trainNumber].trainNumber = trainNumber;
-  schedule[trainNumber].trainDirection = trainDirection;
   schedule[trainNumber].trainWeekdays = trainWeekdays;
 
   return schedule[trainNumber];
 }).then(dataset => {
   // 畫折線
   dataset.forEach(data => {
-    let trainDirection = data.trainDirection,
-      trainNumber = data.trainNumber,
+    let trainNumber = data.trainNumber,
       trainType = parseInt(trainNumber / 100) % 10,
-      isIrregular = parseInt(trainNumber / 1000) > 0 ? true : false,
+      isIrregular = parseInt(trainNumber / 1000) > 0,
       trainWeekdays = data.trainWeekdays.replace(/-+/g, "").replace("7", "0"),
-      todayWeekday = d3.timeFormat('%w')(new Date()),
+      todayWeekday = d3.timeFormat('%w')(today),
       re = new RegExp(todayWeekday),
       currentPath = svg.append("path")
         .attr("stroke", colors[trainType])
