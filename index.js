@@ -5,7 +5,7 @@ const today = new Date(),
   tomorrowDate = d3.timeFormat("%Y/%m/%d")(tomorrow);
 
 // 擷取時間
-function parseTime(timeString) {
+let parseTime = (timeString) => {
   let hour = timeString.split(":")[0],
     prefix = ((hour === "00") ? tomorrowDate : todayDate) + " ";
 
@@ -13,7 +13,7 @@ function parseTime(timeString) {
 }
 
 // 手動加減時間
-function addMinutes(source, minutes = 0) {
+let addMinutes = (source, minutes = 0) => {
   // source 必須是 DateTime object
   output = new Date(source);
   output.setMinutes(output.getMinutes() + parseInt(minutes));
@@ -96,7 +96,7 @@ const colors = {
 };
 
 // 設定自訂座標資料
-var yTickFormat = (d, i) => {
+let yTickFormat = (d, i) => {
   let j = d3.format("02")(i + 1);
   return stations[j];
 };
@@ -107,7 +107,7 @@ const margin = { top: 20, right: 40, bottom: 20, left: 40 },
   height = 700 - margin.top - margin.bottom;
 
 // 設定 SVG
-var svg = d3.select("body")
+let svg = d3.select("body")
   .append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
@@ -115,7 +115,7 @@ var svg = d3.select("body")
   .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
 // 設定 X 軸
-var x = d3.scaleTime()
+let x = d3.scaleTime()
   // 座標範圍
   .range([0, width])
   // 資料範圍
@@ -132,7 +132,7 @@ var x = d3.scaleTime()
     .tickSize(height);
 
 // 設定 Y 軸
-var y = d3.scaleLinear()
+let y = d3.scaleLinear()
   .range([0, height])
   .domain([mileage.NAG, mileage.ZUY]),
   yAxisLeft = d3.axisLeft(y)
@@ -172,18 +172,18 @@ svg.append("g")
   .call(yAxisHorizon);
 
 // d3.line
-var valueline = d3.line()
+let valueline = d3.line()
   .x(d => { return x(d.time); })
   .y(d => { return y(d.mileage); });
 
 // 讀取 CSV
 let currentTimeTableDate = '2023/10/16',
   nextTimeTableDate = '2024/03/01',
-  timeTableDate = (today >= new Date(nextTimeTableDate) ? nextTimeTableDate : currentTimeTableDate);
-var rawURL = `https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/${timeTableDate}/timetable.csv`;
+  timeTableDate = (today >= new Date(nextTimeTableDate) ? nextTimeTableDate : currentTimeTableDate),
+  rawURL = `https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/${timeTableDate}/timetable.csv`;
 
 d3.csv(rawURL, (d, i) => {
-  var trainNumber = d.車次,
+  let trainNumber = d.車次,
     trainType = parseInt(+trainNumber / 100) % 10,
     trainDirection = (+trainNumber % 2) ? "s" : "n",
     trainWeekdays = d.行駛日,
@@ -392,7 +392,7 @@ d3.csv(rawURL, (d, i) => {
 }).then(dataset => {
   // 畫折線
   dataset.forEach(data => {
-    var trainDirection = data.trainDirection,
+    let trainDirection = data.trainDirection,
       trainNumber = data.trainNumber,
       trainType = parseInt(trainNumber / 100) % 10,
       isIrregular = parseInt(trainNumber / 1000) > 0 ? true : false,
@@ -411,7 +411,7 @@ d3.csv(rawURL, (d, i) => {
     }
 
     for (let i = 0; i < data.length - 1; i++) {
-      var isDrawTrainNo = false;
+      let isDrawTrainNo = false;
 
       if (i === 0) {
         isDrawTrainNo = true;
@@ -424,13 +424,13 @@ d3.csv(rawURL, (d, i) => {
       }
 
       // 計算角度
-      var angle = Math.atan2(
+      let angle = Math.atan2(
         y(data[i + 1].mileage) - y(data[i].mileage),
         x(data[i + 1].time) - x(data[i].time),
       ) * 180 / Math.PI;
 
       // 計算文字座標
-      var xTextPosition = (x(data[i + 1].time) + x(data[i].time)) / 2,
+      let xTextPosition = (x(data[i + 1].time) + x(data[i].time)) / 2,
         yTextPosition = (y(data[i + 1].mileage) + y(data[i].mileage)) / 2 - 3;
 
       // 加上車次資訊
