@@ -177,7 +177,7 @@ let valueline = d3.line()
   .y(d => { return y(d.mileage); });
 
 // 讀取 CSV
-let timeTableDate = '2024/04/09',
+let timeTableDate = '2024/07/01',
   rawURL = `https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/${timeTableDate}/timetable.csv`;
 
 d3.csv(rawURL, (d) => {
