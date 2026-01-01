@@ -260,14 +260,16 @@ function switchTimetable(dateString) {
         );
       }
 
-      if (trainType !== 5) {
+      if (p.TAC !== null) {
+        if (trainType !== 5) {
+          schedule[trainNumber].push(
+            { mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC) }
+          );
+        }
         schedule[trainNumber].push(
-          { mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC) }
+          { mileage: mileage.TAC, time: p.TAC }
         );
       }
-      schedule[trainNumber].push(
-        { mileage: mileage.TAC, time: p.TAC }
-      );
 
       if (p.CHH !== null) {
         schedule[trainNumber].push(
