@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WD0EM6QN6L"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -18,7 +17,7 @@
 
     gtag('config', 'G-WD0EM6QN6L');
   </script>
-  <script async src="index.js"></script>
+  <script defer src="index.js"></script>
   <style>
     text,
     .trainNumber {
@@ -45,6 +44,12 @@
   <title>台灣高鐵列車運行圖</title>
 </head>
 
-<body></body>
+<body>
+<div style="padding: 10px; text-align: center; font-family: 'Noto Sans TC';">
+  <a href="#" onclick="switchTimetable('2025/11/07'); return false;">現在時刻表</a>
+  &nbsp;|&nbsp;
+  <a href="#" onclick="switchTimetable('2026/02/02'); return false;">2026/02/02 起時刻表</a>
+</div>
+</body>
 
 </html>

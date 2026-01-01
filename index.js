@@ -15,7 +15,7 @@ let parseTime = (timeString) => {
 // 手動加減時間
 let addMinutes = (source, minutes = 0) => {
   // source 必須是 DateTime object
-  output = new Date(source);
+  let output = new Date(source);
   output.setMinutes(output.getMinutes() + parseInt(minutes));
   return output;
 }
@@ -176,271 +176,287 @@ let valueline = d3.line()
   .x(d => { return x(d.time); })
   .y(d => { return y(d.mileage); });
 
-// 讀取 CSV
-let timeTableDate = '2025/11/07',
-  rawURL = `https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/${timeTableDate}/timetable.csv`;
 
-d3.csv(rawURL, (d) => {
-  let trainNumber = d.車次,
-    trainType = parseInt(+trainNumber / 100) % 10,
-    trainDirection = (+trainNumber % 2) ? "s" : "n",
-    trainWeekdays = d.行駛日,
-    p = {
-      NAG: parseTime(d.南港),
-      TPE: parseTime(d.台北),
-      BAQ: parseTime(d.板橋),
-      TAY: parseTime(d.桃園),
-      HSC: parseTime(d.新竹),
-      MIL: parseTime(d.苗栗),
-      TAC: parseTime(d.台中),
-      CHH: parseTime(d.彰化),
-      YUL: parseTime(d.雲林),
-      CHY: parseTime(d.嘉義),
-      TNN: parseTime(d.台南),
-      ZUY: parseTime(d.左營)
-    },
-    schedule = {};
+// ==========================================
+// 切換時刻表的主函式
+// ==========================================
+function switchTimetable(dateString) {
+  // 1. 清除舊資料
+  // 移除所有帶有 'train-data' class 的元素 (包含線條和文字)
+  svg.selectAll(".train-data").remove();
 
-  schedule[trainNumber] = [];
+  // 2. 設定新的 URL
+  let rawURL = `https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/${dateString}/timetable.csv`;
 
-  if (trainDirection === "s") {
-    if (p.NAG !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.NAG, time: p.NAG }
-      );
-    }
+  console.log(`Loading: ${dateString}`);
 
-    if (p.TPE !== null) {
+  // 3. 讀取 CSV 並繪圖
+  d3.csv(rawURL, (d) => {
+    let trainNumber = d.車次,
+      trainType = parseInt(+trainNumber / 100) % 10,
+      trainDirection = (+trainNumber % 2) ? "s" : "n",
+      trainWeekdays = d.行駛日,
+      p = {
+        NAG: parseTime(d.南港),
+        TPE: parseTime(d.台北),
+        BAQ: parseTime(d.板橋),
+        TAY: parseTime(d.桃園),
+        HSC: parseTime(d.新竹),
+        MIL: parseTime(d.苗栗),
+        TAC: parseTime(d.台中),
+        CHH: parseTime(d.彰化),
+        YUL: parseTime(d.雲林),
+        CHY: parseTime(d.嘉義),
+        TNN: parseTime(d.台南),
+        ZUY: parseTime(d.左營)
+      },
+      schedule = {};
+
+    schedule[trainNumber] = [];
+
+    if (trainDirection === "s") {
       if (p.NAG !== null) {
         schedule[trainNumber].push(
-          { mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE) }
+          { mileage: mileage.NAG, time: p.NAG }
+        );
+      }
+
+      if (p.TPE !== null) {
+        if (p.NAG !== null) {
+          schedule[trainNumber].push(
+            { mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE) }
+          );
+        }
+        schedule[trainNumber].push(
+          { mileage: mileage.TPE, time: p.TPE }
+        );
+      }
+
+      if (p.BAQ !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.BAQ, time: addMinutes(p.BAQ, intervals.BAQ) },
+          { mileage: mileage.BAQ, time: p.BAQ }
+        );
+      }
+
+      if (p.TAY !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.TAY, time: addMinutes(p.TAY, intervals.TAY) },
+          { mileage: mileage.TAY, time: p.TAY }
+        );
+      }
+
+      if (p.HSC !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.HSC, time: addMinutes(p.HSC, intervals.HSC) },
+          { mileage: mileage.HSC, time: p.HSC }
+        );
+      }
+
+      if (p.MIL !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.MIL, time: addMinutes(p.MIL, intervals.MIL) },
+          { mileage: mileage.MIL, time: p.MIL }
+        );
+      }
+
+      if (trainType !== 5) {
+        schedule[trainNumber].push(
+          { mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC) }
         );
       }
       schedule[trainNumber].push(
-        { mileage: mileage.TPE, time: p.TPE }
+        { mileage: mileage.TAC, time: p.TAC }
       );
-    }
 
-    if (p.BAQ !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.BAQ, time: addMinutes(p.BAQ, intervals.BAQ) },
-        { mileage: mileage.BAQ, time: p.BAQ }
-      );
-    }
-
-    if (p.TAY !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.TAY, time: addMinutes(p.TAY, intervals.TAY) },
-        { mileage: mileage.TAY, time: p.TAY }
-      );
-    }
-
-    if (p.HSC !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.HSC, time: addMinutes(p.HSC, intervals.HSC) },
-        { mileage: mileage.HSC, time: p.HSC }
-      );
-    }
-
-    if (p.MIL !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.MIL, time: addMinutes(p.MIL, intervals.MIL) },
-        { mileage: mileage.MIL, time: p.MIL }
-      );
-    }
-
-    if (trainType !== 5) {
-      schedule[trainNumber].push(
-        { mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC) }
-      );
-    }
-    schedule[trainNumber].push(
-      { mileage: mileage.TAC, time: p.TAC }
-    );
-
-    if (p.CHH !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.CHH, time: addMinutes(p.CHH, intervals.CHH) },
-        { mileage: mileage.CHH, time: p.CHH }
-      );
-    }
-
-    if (p.YUL !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.YUL, time: addMinutes(p.YUL, intervals.YUL) },
-        { mileage: mileage.YUL, time: p.YUL }
-      );
-    }
-
-    if (p.CHY !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.CHY, time: addMinutes(p.CHY, intervals.CHY) },
-        { mileage: mileage.CHY, time: p.CHY }
-      );
-    }
-
-    if (p.TNN !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.TNN, time: addMinutes(p.TNN, intervals.TNN) },
-        { mileage: mileage.TNN, time: p.TNN }
-      );
-    }
-
-    if (p.ZUY !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.ZUY, time: p.ZUY }
-      );
-    }
-  } else {
-    if (p.ZUY !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.ZUY, time: p.ZUY }
-      );
-    }
-
-    if (p.TNN !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.TNN, time: addMinutes(p.TNN, intervals.TNN) },
-        { mileage: mileage.TNN, time: p.TNN }
-      );
-    }
-
-    if (p.CHY !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.CHY, time: addMinutes(p.CHY, intervals.CHY) },
-        { mileage: mileage.CHY, time: p.CHY }
-      );
-    }
-
-    if (p.YUL !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.YUL, time: addMinutes(p.YUL, intervals.YUL) },
-        { mileage: mileage.YUL, time: p.YUL }
-      );
-    }
-
-    if (p.CHH !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.CHH, time: addMinutes(p.CHH, intervals.CHH) },
-        { mileage: mileage.CHH, time: p.CHH }
-      );
-    }
-
-    if (trainType !== 5) {
-      schedule[trainNumber].push(
-        { mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC) }
-      );
-    }
-    schedule[trainNumber].push(
-      { mileage: mileage.TAC, time: p.TAC }
-    );
-
-    if (p.MIL !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.MIL, time: addMinutes(p.MIL, intervals.MIL) },
-        { mileage: mileage.MIL, time: p.MIL }
-      );
-    }
-
-    if (p.HSC !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.HSC, time: addMinutes(p.HSC, intervals.HSC) },
-        { mileage: mileage.HSC, time: p.HSC }
-      );
-    }
-
-    if (p.TAY !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.TAY, time: addMinutes(p.TAY, intervals.TAY) },
-        { mileage: mileage.TAY, time: p.TAY }
-      );
-    }
-
-    if (p.BAQ !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.BAQ, time: addMinutes(p.BAQ, intervals.BAQ) },
-        { mileage: mileage.BAQ, time: p.BAQ }
-      );
-    }
-
-    if (p.TPE !== null) {
-      if (p.NAG !== null) {
+      if (p.CHH !== null) {
         schedule[trainNumber].push(
-          { mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE) }
+          { mileage: mileage.CHH, time: addMinutes(p.CHH, intervals.CHH) },
+          { mileage: mileage.CHH, time: p.CHH }
+        );
+      }
+
+      if (p.YUL !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.YUL, time: addMinutes(p.YUL, intervals.YUL) },
+          { mileage: mileage.YUL, time: p.YUL }
+        );
+      }
+
+      if (p.CHY !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.CHY, time: addMinutes(p.CHY, intervals.CHY) },
+          { mileage: mileage.CHY, time: p.CHY }
+        );
+      }
+
+      if (p.TNN !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.TNN, time: addMinutes(p.TNN, intervals.TNN) },
+          { mileage: mileage.TNN, time: p.TNN }
+        );
+      }
+
+      if (p.ZUY !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.ZUY, time: p.ZUY }
+        );
+      }
+    } else {
+      if (p.ZUY !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.ZUY, time: p.ZUY }
+        );
+      }
+
+      if (p.TNN !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.TNN, time: addMinutes(p.TNN, intervals.TNN) },
+          { mileage: mileage.TNN, time: p.TNN }
+        );
+      }
+
+      if (p.CHY !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.CHY, time: addMinutes(p.CHY, intervals.CHY) },
+          { mileage: mileage.CHY, time: p.CHY }
+        );
+      }
+
+      if (p.YUL !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.YUL, time: addMinutes(p.YUL, intervals.YUL) },
+          { mileage: mileage.YUL, time: p.YUL }
+        );
+      }
+
+      if (p.CHH !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.CHH, time: addMinutes(p.CHH, intervals.CHH) },
+          { mileage: mileage.CHH, time: p.CHH }
+        );
+      }
+
+      if (trainType !== 5) {
+        schedule[trainNumber].push(
+          { mileage: mileage.TAC, time: addMinutes(p.TAC, intervals.TAC) }
         );
       }
       schedule[trainNumber].push(
-        { mileage: mileage.TPE, time: p.TPE }
+        { mileage: mileage.TAC, time: p.TAC }
       );
-    }
 
-    if (p.NAG !== null) {
-      schedule[trainNumber].push(
-        { mileage: mileage.NAG, time: p.NAG }
-      );
-    }
-  } // endif trainDirection
-
-  schedule[trainNumber].columns = ["time", "mileage"];
-  schedule[trainNumber].trainNumber = trainNumber;
-  schedule[trainNumber].trainWeekdays = trainWeekdays;
-
-  return schedule[trainNumber];
-}).then(dataset => {
-  // 畫折線
-  dataset.forEach(data => {
-    let trainNumber = data.trainNumber,
-      trainType = parseInt(trainNumber / 100) % 10,
-      isIrregular = parseInt(trainNumber / 1000) > 0,
-      trainWeekdays = data.trainWeekdays.replace(/-+/g, "").replace("7", "0"),
-      todayWeekday = d3.timeFormat('%w')(today),
-      re = new RegExp(todayWeekday),
-      currentPath = svg.append("path")
-        .attr("stroke", colors[trainType])
-        .attr("class", "line" + trainType)
-        .attr("id", "path-" + trainNumber)
-        .attr("d", valueline(data));
-
-    // 如果今天沒開這台車，用虛線表示
-    if (isIrregular && !re.test(trainWeekdays)) {
-      currentPath.attr("stroke-dasharray", "2")
-    }
-
-    for (let i = 0; i < data.length - 1; i++) {
-      let isDrawTrainNo = false;
-
-      if (i === 0) {
-        isDrawTrainNo = true;
-      } else if (data[i].mileage === mileage.TAC && data[i + 1].mileage !== mileage.TAC) {
-        isDrawTrainNo = true;
+      if (p.MIL !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.MIL, time: addMinutes(p.MIL, intervals.MIL) },
+          { mileage: mileage.MIL, time: p.MIL }
+        );
       }
 
-      if (!isDrawTrainNo) {
-        continue;
+      if (p.HSC !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.HSC, time: addMinutes(p.HSC, intervals.HSC) },
+          { mileage: mileage.HSC, time: p.HSC }
+        );
       }
 
-      // 計算角度
-      let angle = Math.atan2(
-        y(data[i + 1].mileage) - y(data[i].mileage),
-        x(data[i + 1].time) - x(data[i].time),
-      ) * 180 / Math.PI;
+      if (p.TAY !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.TAY, time: addMinutes(p.TAY, intervals.TAY) },
+          { mileage: mileage.TAY, time: p.TAY }
+        );
+      }
 
-      // 計算文字座標
-      let xTextPosition = (x(data[i + 1].time) + x(data[i].time)) / 2,
-        yTextPosition = (y(data[i + 1].mileage) + y(data[i].mileage)) / 2 - 3;
+      if (p.BAQ !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.BAQ, time: addMinutes(p.BAQ, intervals.BAQ) },
+          { mileage: mileage.BAQ, time: p.BAQ }
+        );
+      }
 
-      // 加上車次資訊
-      svg.append("text")
-        .attr("stroke-width", 0)
-        .attr("text-anchor", "middle")
-        .attr(
-          "transform",
-          "translate(" + xTextPosition + ", " + yTextPosition + ") rotate(" + angle + ")"
-        )
-        .attr("class", "trainNumber")
-        .attr("id", "text-" + trainNumber + "-" + i)
-        .style("fill", colors[trainType])
-        .text(trainNumber);
-    }
+      if (p.TPE !== null) {
+        if (p.NAG !== null) {
+          schedule[trainNumber].push(
+            { mileage: mileage.TPE, time: addMinutes(p.TPE, intervals.TPE) }
+          );
+        }
+        schedule[trainNumber].push(
+          { mileage: mileage.TPE, time: p.TPE }
+        );
+      }
+
+      if (p.NAG !== null) {
+        schedule[trainNumber].push(
+          { mileage: mileage.NAG, time: p.NAG }
+        );
+      }
+    } // endif trainDirection
+
+    schedule[trainNumber].columns = ["time", "mileage"];
+    schedule[trainNumber].trainNumber = trainNumber;
+    schedule[trainNumber].trainWeekdays = trainWeekdays;
+
+    return schedule[trainNumber];
+  }).then(dataset => {
+    // 4. 畫折線
+    dataset.forEach(data => {
+      let trainNumber = data.trainNumber,
+        trainType = parseInt(trainNumber / 100) % 10,
+        isIrregular = parseInt(trainNumber / 1000) > 0,
+        trainWeekdays = data.trainWeekdays.replace(/-+/g, "").replace("7", "0"),
+        todayWeekday = d3.timeFormat('%w')(today),
+        re = new RegExp(todayWeekday),
+        currentPath = svg.append("path")
+          .attr("stroke", colors[trainType])
+          .attr("class", "line" + trainType + " train-data") // ★ 加入 train-data class 以便刪除
+          .attr("id", "path-" + trainNumber)
+          .attr("d", valueline(data));
+
+      // 如果今天沒開這台車，用虛線表示
+      if (isIrregular && !re.test(trainWeekdays)) {
+        currentPath.attr("stroke-dasharray", "2")
+      }
+
+      for (let i = 0; i < data.length - 1; i++) {
+        let isDrawTrainNo = false;
+
+        if (i === 0) {
+          isDrawTrainNo = true;
+        } else if (data[i].mileage === mileage.TAC && data[i + 1].mileage !== mileage.TAC) {
+          isDrawTrainNo = true;
+        }
+
+        if (!isDrawTrainNo) {
+          continue;
+        }
+
+        // 計算角度
+        let angle = Math.atan2(
+          y(data[i + 1].mileage) - y(data[i].mileage),
+          x(data[i + 1].time) - x(data[i].time),
+        ) * 180 / Math.PI;
+
+        // 計算文字座標
+        let xTextPosition = (x(data[i + 1].time) + x(data[i].time)) / 2,
+          yTextPosition = (y(data[i + 1].mileage) + y(data[i].mileage)) / 2 - 3;
+
+        // 加上車次資訊
+        svg.append("text")
+          .attr("stroke-width", 0)
+          .attr("text-anchor", "middle")
+          .attr(
+            "transform",
+            "translate(" + xTextPosition + ", " + yTextPosition + ") rotate(" + angle + ")"
+          )
+          .attr("class", "trainNumber train-data") // ★ 加入 train-data class 以便刪除
+          .attr("id", "text-" + trainNumber + "-" + i)
+          .style("fill", colors[trainType])
+          .text(trainNumber);
+      }
+    });
   });
-});
+}
+
+
+// 5. 頁面載入時，執行一次預設的時刻表
+switchTimetable('2025/11/07');
