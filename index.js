@@ -178,17 +178,15 @@ let valueline = d3.line()
 
 
 // ==========================================
-// 切換時刻表的主函式
+// 繪製時刻表的主函式
 // ==========================================
-function switchTimetable(dateString) {
+function switchTimetable() {
   // 1. 清除舊資料
   // 移除所有帶有 'train-data' class 的元素 (包含線條和文字)
   svg.selectAll(".train-data").remove();
 
   // 2. 設定新的 URL
-  let rawURL = `https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/${dateString}/timetable.csv`;
-
-  console.log(`Loading: ${dateString}`);
+  let rawURL = `https://raw.githubusercontent.com/repeat/taiwan-high-speed-rail-timetable/master/2026/02/02/timetable.csv`;
 
   // 3. 讀取 CSV 並繪圖
   d3.csv(rawURL, (d) => {
@@ -461,4 +459,4 @@ function switchTimetable(dateString) {
 
 
 // 5. 頁面載入時，執行一次預設的時刻表
-switchTimetable('2025/11/07');
+switchTimetable();
