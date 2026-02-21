@@ -61,7 +61,7 @@ const stations = {
 };
 
 // 設定自訂座標間隔
-const yTickValues = [
+const xTickValues = [
   mileage.NAG,
   mileage.TPE,
   mileage.BAQ,
@@ -96,15 +96,15 @@ const colors = {
 };
 
 // 設定自訂座標資料
-let yTickFormat = (_, i) => {
+let xTickFormat = (_, i) => {
   let j = d3.format("02")(i + 1);
   return stations[j];
 };
 
 // 設定範圍
-const margin = { top: 20, right: 40, bottom: 20, left: 40 },
-  width = 4200 - margin.left - margin.right,
-  height = 700 - margin.top - margin.bottom;
+const margin = { top: 35, right: 40, bottom: 30, left: 50 },
+  width = 1900 - margin.left - margin.right,
+  height = 8400 - margin.top - margin.bottom;
 
 // 設定 SVG
 let svg = d3.select("body")
@@ -115,34 +115,34 @@ let svg = d3.select("body")
   .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
 // 設定 X 軸
-let x = d3.scaleTime()
+let x = d3.scaleLinear()
   // 座標範圍
   .range([0, width])
   // 資料範圍
-  .domain([parseTime("05:50"), parseTime("00:10")]),
+  .domain([mileage.NAG, mileage.ZUY]),
   xAxisBottom = d3.axisBottom(x)
-    .tickArguments([d3.timeMinute.every(10)])
-    .tickFormat(d3.timeFormat("%H:%M")),
+    .tickValues(xTickValues)
+    .tickFormat(xTickFormat),
   xAxisTop = d3.axisTop(x)
-    .tickArguments([d3.timeMinute.every(10)])
-    .tickFormat(d3.timeFormat("%H:%M")),
+    .tickValues(xTickValues)
+    .tickFormat(xTickFormat),
   xAxisVertical = d3.axisTop(x)
-    .tickArguments([d3.timeMinute.every(10)])
+    .tickValues(xTickValues)
     .tickFormat("")
     .tickSize(height);
 
 // 設定 Y 軸
-let y = d3.scaleLinear()
+let y = d3.scaleTime()
   .range([0, height])
-  .domain([mileage.NAG, mileage.ZUY]),
+  .domain([parseTime("05:50"), parseTime("00:10")]),
   yAxisLeft = d3.axisLeft(y)
-    .tickValues(yTickValues)
-    .tickFormat(yTickFormat),
+    .tickArguments([d3.timeMinute.every(2)])
+    .tickFormat(d => d.getMinutes() % 10 === 0 ? d3.timeFormat("%H:%M")(d) : ""),
   yAxisRight = d3.axisRight(y)
-    .tickValues(yTickValues)
-    .tickFormat(yTickFormat),
+    .tickArguments([d3.timeMinute.every(2)])
+    .tickFormat(d => d.getMinutes() % 10 === 0 ? d3.timeFormat("%H:%M")(d) : ""),
   yAxisHorizon = d3.axisRight(y)
-    .tickValues(yTickValues)
+    .tickArguments([d3.timeMinute.every(2)])
     .tickFormat("")
     .tickSize(width);
 
@@ -167,14 +167,35 @@ svg.append("g")
   .attr("class", "y axis right")
   .attr("transform", "translate(" + width + ", 0)")
   .call(yAxisRight);
-svg.append("g")
+
+// 畫水平網格線，並將整點加粗
+let yAxisHorizonGroup = svg.append("g")
   .attr("class", "y axis horizon")
   .call(yAxisHorizon);
 
+// 針對每條水平網格線設定不同的樣式
+yAxisHorizonGroup.selectAll(".tick line")
+  .style("stroke-width", function (d) {
+    if (d.getMinutes() === 0) return "2px"; // 整點: 加粗
+    return "1px"; // 10分或2分: 一般粗細
+  })
+  .style("stroke", function (d) {
+    if (d.getMinutes() === 0) return "#999"; // 整點: 較深
+    return "grey"; // 10分或2分: 一般顏色
+  })
+  .style("stroke-dasharray", function (d) {
+    // 凡是分鐘數被 10 整除的都是實線 (整點與10分)，其餘為 2 分鐘的虛線
+    // "1,3" 是圓點狀細碎虛線，有別於停駛列車的 "2" (dasharray = "2,2")
+    return d.getMinutes() % 10 === 0 ? "none" : "1,3";
+  })
+  .style("shape-rendering", function (d) {
+    return d.getMinutes() === 0 ? "auto" : "crispEdges";
+  });
+
 // d3.line
 let valueline = d3.line()
-  .x(d => { return x(d.time); })
-  .y(d => { return y(d.mileage); });
+  .x(d => { return x(d.mileage); })
+  .y(d => { return y(d.time); });
 
 
 // ==========================================
@@ -424,21 +445,34 @@ function switchTimetable() {
           isDrawTrainNo = true;
         } else if (data[i].mileage === mileage.TAC && data[i + 1].mileage !== mileage.TAC) {
           isDrawTrainNo = true;
+        } else if (
+          // 針對不停靠台中的直達車 (如 1985 車次)
+          // 判斷此線段的兩端點是否剛好跨越了台中站 (一個在台中以北，一個在台中以南)
+          // 這樣就能在跨越台中的線段中央，也就是大約在台中站的位置，將車次號碼印出來
+          (data[i].mileage < mileage.TAC && data[i + 1].mileage > mileage.TAC) ||
+          (data[i].mileage > mileage.TAC && data[i + 1].mileage < mileage.TAC)
+        ) {
+          isDrawTrainNo = true;
         }
 
         if (!isDrawTrainNo) {
           continue;
         }
 
+        let xDiff = x(data[i + 1].mileage) - x(data[i].mileage),
+          yDiff = y(data[i + 1].time) - y(data[i].time);
+
         // 計算角度
-        let angle = Math.atan2(
-          y(data[i + 1].mileage) - y(data[i].mileage),
-          x(data[i + 1].time) - x(data[i].time),
-        ) * 180 / Math.PI;
+        let angle = Math.atan2(yDiff, xDiff) * 180 / Math.PI;
+
+        // 修正翻轉造成文字顛倒的問題
+        if (xDiff < 0) {
+          angle += 180;
+        }
 
         // 計算文字座標
-        let xTextPosition = (x(data[i + 1].time) + x(data[i].time)) / 2,
-          yTextPosition = (y(data[i + 1].mileage) + y(data[i].mileage)) / 2 - 3;
+        let xTextPosition = (x(data[i + 1].mileage) + x(data[i].mileage)) / 2,
+          yTextPosition = (y(data[i + 1].time) + y(data[i].time)) / 2 - 3;
 
         // 加上車次資訊
         svg.append("text")
